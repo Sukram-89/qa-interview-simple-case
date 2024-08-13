@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '@pageobjects/loginpage';
-import { existingUsers } from '@pwsetup/userData'
-import { UserPage } from '@pageobjects/userpage';
+import { test, expect } from '@playwright/test'
+import { existingUsers } from '@testdata/userdata'
+import { LoginPage } from '@pageobjects/loginpage'
+import { UserPage } from '@pageobjects/userpage'
 
 test.describe.configure({ mode: 'parallel' })
 

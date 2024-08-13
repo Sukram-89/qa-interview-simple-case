@@ -17,7 +17,7 @@
     "jsx": "react",
     "baseUrl": ".",
     "paths": {
-      "@pwsetup/*": ["playwright/.setup/*"],
+      "@testdata*": ["tests/testdata/*"],
       "@pageobjects/*": ["page-objects/*"]
     },
   },

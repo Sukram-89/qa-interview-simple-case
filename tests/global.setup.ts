@@ -1,7 +1,7 @@
 import { FullConfig} from '@playwright/test'
 import { promises as fs } from 'fs'
-import { existingUsers } from '../playwright/.setup/userData'
 import { setupDir, setupFile } from '../playwright.config'
+import { existingUsers } from '@testdata/userdata'
 
 async function globalSetup(config: FullConfig) {
   const { baseURL } = config.projects[0].use
