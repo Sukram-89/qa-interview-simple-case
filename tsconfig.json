@@ -14,7 +14,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@testdata*": ["tests/testdata/*"],
+      "@pageobjects/*": ["page-objects/*"]
+    },
   },
   "include": ["./src"]
 }

@@ -1,29 +1,41 @@
 import { test, expect } from '@playwright/test'
-import { existingUsers } from '../../test-setup/localstorage.setup'
+import { existingUsers } from '@testdata/userdata'
+import { LoginPage } from '@pageobjects/loginpage'
+import { UserPage } from '@pageobjects/userpage'
 
-test.describe.configure({ mode: 'serial' })
+test.describe.configure({ mode: 'parallel' })
 
-test.describe('login form tests', () => {
-  test('logging in works with existing account', async ({ page }) => {
-    await page.goto('localhost:8080/login')
-
+test.describe('Successful login scenarios', () => {
+  test('should log in successfully with valid credentials', async ({ page }) => {
+    const loginPage = new LoginPage(page)
     const existingUser = existingUsers[0]
 
-    await page
-      .locator('#root form div:nth-child(1) > div > input')
-      .pressSequentially(existingUser.email)
+    await loginPage.navigateTo()
+    await loginPage.inputUsernameAndPassword(existingUser.email, existingUser.password)
+    await loginPage.clickLogin()
 
-    await page
-      .locator('#root form div:nth-child(2) > div > input')
-      .pressSequentially(existingUser.password)
+    await expect(new UserPage(page).logoutButton).toBeVisible()
+  })
+})
 
-    // Submit button
-    const button = page.locator('form .MuiButton-sizeMedium')
-    // Click on the button
-    button.click()
+test.describe('Negative login scenarios', () => {
+  test('should display an error message for incorrect password', async ({ page }) => {
+    const loginPage = new LoginPage(page)
+    const existingUser = existingUsers[0]
 
-    // Wait for 1 second until page is fully loaded
-    await page.waitForTimeout(1000)
-    await expect(page.getByText('Log out')).toBeVisible()
+    await loginPage.navigateTo()
+    await loginPage.inputUsernameAndPassword(existingUser.email, "incorrectpassword")
+    await loginPage.clickLogin()
+
+    await expect(loginPage.isErrorMessageVisible()).toBeTruthy()
+  })
+
+  test('should disable login button for invalid username format', async ({ page }) => {
+    const loginPage = new LoginPage(page)
+
+    await loginPage.navigateTo()
+    await loginPage.inputUsernameAndPassword("invalidemail", "password")
+
+    await expect(loginPage.loginButton).toBeDisabled()
   })
 })
